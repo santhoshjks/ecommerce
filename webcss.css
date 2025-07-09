@@ -108,47 +108,48 @@ input{
     
     
 }
-
+.img-container{
+  padding: 5%;
+}
 
 .img1{
     position: absolute;
+    padding-left: 5%;
     top: auto;
     left: auto;
     height: auto;
     width: auto;
     cursor: pointer;
-    border-style: solid;
-    border-left-width: 120px;
-    border-bottom-width: 70px;
+   
 }
 .img2{
-
+    padding-right: 10%;
     height:auto;
     width:auto;
     cursor: pointer;
     text-align: right;
-    border-style: solid;
-    border-right-width: 120px;
-    border-bottom-width: 70px;
+    
     
 }
 .img3{
     position: absolute;
+    padding-left: 5%;
+    padding-top:5% ;
     top: auto;
     left: auto;
     height: auto;
     width: auto;
     cursor: pointer;
-    border-style: solid;
-    border-left-width: 120px;
+   
 }
 .img4{
+    padding-right: 10%;
+    padding-top: 8%;
     height: auto;
     width: auto;
     cursor: pointer;
     text-align: right;
-    border-style: solid;
-    border-right-width: 120px;
+    
 }
 .img5{
     height: auto;

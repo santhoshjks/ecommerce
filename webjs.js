@@ -65,19 +65,19 @@ const searchBar = document.getElementById("searchBar");
         p.name.toLowerCase().includes(search)
       );
       displayProducts(filtered);
-      clearBtn.style.display = "block";
+      clearBtn.style.display = "none";
     }
 
     searchBtn.addEventListener("click", handleSearch);
 
     searchBar.addEventListener("input", () => {
-      clearBtn.style.display = searchBar.value.trim() ? "block" : "none";
+      clearBtn.style.display =  "none";
     });
 
     clearBtn.addEventListener("click", () => {
       searchBar.value = "";
       productList.innerHTML = "";
-      clearBtn.style.display = "none";
+      clearBtn.style.display = "";
       searchBar.focus();
     });
 
