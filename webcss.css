@@ -110,6 +110,10 @@ input{
     
     
 }
+img:focus{
+  outline: none;
+  box-shadow: none;
+}
 .img-container{
   padding: 5%;
 }
