@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Place Order</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial;
+      padding: 20px;
+      text-align: center;
+    }
+    input {
+      width: 400px;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      background: green;
+      color: white;
+      padding: 10px 15px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: darkgreen;
+    }
+    strong{
+      color:red;
+    }
+  </style>
+</head>
+<body>
+  <h2 style="color: blue; font-size: xx-large;">Order Form</h2>
+
+  <p><strong>Product Name:</strong> <span id="productName"></span></p>
+  <p><strong>Product Price:</strong> ₹<span id="productPrice"></span></p>
+
+  <form id="orderForm">
+    <input type="text" name="firstName" placeholder="First Name" required><br>
+    <input type="text" name="lastName" placeholder="Last Name" required><br>
+    <input type="email" name="email" placeholder="Email" required><br>
+    <input type="text" name="street" placeholder="Street" required><br>
+    <input type="text" name="city" placeholder="City" required><br>
+    <input type="text" name="state" placeholder="State" required><br>
+    <input type="text" name="pincode" placeholder="Pincode" required><br>
+    <input type="tel" name="phone" placeholder="Phone Number" required><br>
+    <input type="tel" name="whatsapp" placeholder="WhatsApp Number" required><br>
+
+    <button type="submit">Place Order</button>
+  </form>
+
+  <p id="response"></p>
+
+  <script>
+     const params = new URLSearchParams(window.location.search);
+  const name = params.get("name");
+  const price = params.get("price");
+
+  if (name && price) {
+    document.getElementById("productName").textContent = name;
+    document.getElementById("productPrice").textContent = price;
+  } else {
+    document.getElementById("productName").textContent = "No product selected";
+    document.getElementById("productPrice").textContent = "";
+  }
+    // Step 1: Load product from previous page
+    const productData = JSON.parse(localStorage.getItem("selectedProduct")) || {};
+    document.getElementById("productName").textContent = productData.name || "N/A";
+    document.getElementById("productPrice").textContent = productData.price || "N/A";
+
+    // Step 2: Submit full order
+    document.getElementById("orderForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const userData = {};
+      formData.forEach((value, key) => userData[key] = value);
+
+      // Combine with product info
+      const orderData = {
+        ...userData,
+        productName: productData.name,
+        productPrice: productData.price
+      };
+
+      fetch('https://script.google.com/macros/s/AKfycbwRhyY1_i09ZWGq0GGMTEAm8PUIHM_4MyqMTFpcxON1CWgYZgTJ7Hrv45-RdIjlAIeR/exec', {
+        method: 'POST',
+        mode:'no-cors',
+        body: JSON.stringify(orderData),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(res => res.text())
+      .then(msg => {
+        document.getElementById("response").textContent = "Order placed successfully,Track your order status via sms & bluedart";
+        alert("Order placed successfully")
+        this.reset();
+        localStorage.removeItem("selectedProduct");
+      })
+      .catch(err => {
+        document.getElementById("response").textContent = "Failed to place order,Please check your internet connection";
+        alert("Failed to place order")
+      });
+    });
+  </script>
+</body>
+</html>

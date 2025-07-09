@@ -1,0 +1,82 @@
+<!DOCTYPE html>    
+<html>    
+<head>    
+  <title>Your Cart</title>    
+  <style>    
+    body {    
+      background-color: black;    
+    }    
+    h1 {    
+      color: blue;    
+      padding-left: 50px;    
+    }    
+    #cartItem {    
+      color: red;    
+      text-align: center;
+      font-size: x-large;    
+    }    
+    .button-container {
+      text-align: center;
+    }
+    button {    
+      padding: 10px 20px;    
+      margin: 10px;    
+      background-color: red;    
+      color: white;    
+      border: none;    
+      cursor: pointer;    
+      font-size: 16px;    
+      border-radius: 5px;    
+    }    
+    button:hover {    
+      background-color: darkred;    
+    }    
+  </style>    
+</head>    
+<body>    
+  <h1>Your Cart</h1>    
+  <div id="cartItem"></div>    
+  <div class="button-container">
+    <button id="proceedBtn" style="display:none;background-color: green;">Proceed to Order</button>    
+  </div>
+
+  <script>    
+    const cartDiv = document.getElementById("cartItem");    
+    const proceedBtn = document.getElementById("proceedBtn");    
+    const product = JSON.parse(localStorage.getItem("cartItem"));    
+    
+    if (product) {    
+      cartDiv.innerHTML = `    
+        <img src="${product.image}" width="200" id="cartImage" style="cursor:pointer;" /><br>    
+        <h2>${product.name}</h2>    
+        <p>${product.price}</p>    
+        <div class="button-container">
+          <button id="removeBtn">Remove from Cart</button>    
+        </div>
+      `;    
+
+      proceedBtn.style.display = "inline-block";
+
+      // Image click → go back    
+      document.getElementById("cartImage").addEventListener("click", () => {    
+        window.location.href = "web21.html";    
+      });    
+
+      // Proceed → order page    
+      proceedBtn.addEventListener("click", () => {    
+        const url = `order.html?name=${encodeURIComponent(product.name)}&price=${encodeURIComponent(product.price)}`;    
+        window.location.href = url;    
+      });    
+
+      // Remove from cart    
+      document.getElementById("removeBtn").addEventListener("click", () => {    
+        localStorage.removeItem("cartItem");    
+        cartDiv.innerHTML = "<p>No items in cart.</p>";    
+        proceedBtn.style.display = "none";    
+      });    
+    } else {    
+      cartDiv.innerHTML = "<p>No items in cart.</p>";    
+    }    
+  </script>    
+</body>    
+</html>
