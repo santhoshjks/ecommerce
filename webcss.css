@@ -11,12 +11,12 @@ body{
   
   #cart{
     position: absolute;
-    top:25%;
-    right: 420px;
+    top:28%;
+    right: 402px;
     margin-top: 10%;
     transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     cursor: pointer;
   }
 .search-container {
@@ -36,7 +36,7 @@ body{
   
   .clear-btn {
     position: absolute;
-    top: 14%;
+    top: 20%;
     right: 10px;
     transform: translateY(-50%);
     border: none;
@@ -83,6 +83,7 @@ body{
     padding: 25px;
     font-size:x-large;
     color:green;
+  
 }
 header{
     text-align:center;
@@ -114,7 +115,7 @@ input{
 
 .img1{
     position: absolute;
-    padding-left: 5%;
+    padding-left: 2%;
     top: auto;
     left: auto;
     height: auto;
@@ -133,8 +134,8 @@ input{
 }
 .img3{
     position: absolute;
-    padding-left: 5%;
-    padding-top:5% ;
+    padding-left: 2%;
+    padding-top:3% ;
     top: auto;
     left: auto;
     height: auto;

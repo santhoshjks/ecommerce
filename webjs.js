@@ -57,7 +57,7 @@ const searchBar = document.getElementById("searchBar");
 
       if (search === "") {
         productList.innerHTML = "<p>Please enter a product name to search.</p>";
-        clearBtn.style.display = "none";
+        
         return;
       }
 
@@ -71,13 +71,13 @@ const searchBar = document.getElementById("searchBar");
     searchBtn.addEventListener("click", handleSearch);
 
     searchBar.addEventListener("input", () => {
-      clearBtn.style.display =  "none";
+      clearBtn.style.display =  "block";
     });
 
     clearBtn.addEventListener("click", () => {
       searchBar.value = "";
       productList.innerHTML = "";
-      clearBtn.style.display = "";
+      clearBtn.style.display = "none";
       searchBar.focus();
     });
 
