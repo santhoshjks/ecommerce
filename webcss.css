@@ -110,10 +110,8 @@ input{
     
     
 }
-img{
-    outline:none;
-}
-img:focus,img:active{
+
+img:active{
   outline: none;
   box-shadow: none;
 }
