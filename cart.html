@@ -1,15 +1,37 @@
 <!DOCTYPE html>    
 <html>    
 <head>    
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Cart</title>    
   <style>    
     body {    
       background-color: black;    
     }    
-    img:focus{
-      outline: none;
-      box-shadow: none;
-    }
+    img {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.img-container img:focus,
+.img-container img:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.img1, .img2, .img3, .img4 {
+  -webkit-tap-highlight-color: transparent;
+  outline: none !important;
+}
+
+*:focus {
+  outline: none !important;
+}
+
     h1 {    
       color: blue;    
       padding-left: 50px;    

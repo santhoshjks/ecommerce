@@ -110,11 +110,30 @@ input{
     
     
 }
-
-img:active{
-  outline: none;
-  box-shadow: none;
+img {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
 }
+
+.img-container img:focus,
+.img-container img:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.img1, .img2, .img3, .img4,.img5,.img6,.img7,.img8 {
+  -webkit-tap-highlight-color: transparent;
+  outline: none !important;
+}
+
+*:focus {
+  outline: none !important;
+}
+
 .img-container{
   padding: 5%;
 }
@@ -189,21 +208,18 @@ img:active{
     
 }
 .img8{
-    height: auto;
-    width: auto;
-    cursor: pointer;
-    text-align:center;
+  height: auto;
+  width: auto;
+  cursor: pointer;
+  text-align:center;
+  border-style: solid;
+  border-color: black;
+  border-bottom-width:50px;
+  
 }
-.img9{
-    height: auto;
-    width: auto;
-    cursor: pointer;
-    text-align:center;
-    border-style: solid;
-    border-color: black;
-    border-bottom-width:50px;
+
     
-}
+
 .about{
     color: red;
     font-size: xx-large;
