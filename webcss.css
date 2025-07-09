@@ -110,7 +110,7 @@ input{
     
     
 }
-div:focus{
+img{
   outline: none;
   box-shadow: none;
 }
