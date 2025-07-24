@@ -1,108 +1,149 @@
-<!DOCTYPE html>    
-<html>    
-<head>    
+<!DOCTYPE html>
+<html>
+<head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Cart</title>    
-  <style>    
-    body {    
-      background-color: black;    
-    }    
-    img {
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
-  user-select: none;
-  outline: none !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-
-.img-container img:focus,
-.img-container img:active {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-.img1, .img2, .img3, .img4 {
-  -webkit-tap-highlight-color: transparent;
-  outline: none !important;
-}
-
-*:focus {
-  outline: none !important;
-}
-
-    h1 {    
-      color: blue;    
-      padding-left: 20px;    
-    }    
-    #cartItem {    
-      color: red;    
-      text-align: center;
-      font-size: x-large;    
-    }    
-    .button-container {
-      text-align: center;
+  <title>Your Cart</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 10px;
     }
-    button {    
-      padding: 10px 20px;    
-      margin: 10px;    
-      background-color: red;    
-      color: white;    
-      border: none;    
-      cursor: pointer;    
-      font-size: 16px;    
-      border-radius: 5px;    
-    }    
-    button:hover {    
-      background-color: darkred;    
-    }    
-  </style>    
-</head>    
-<body style="max-width: 1000px; margin: 20px auto;">    
-  <h1>Your Cart</h1>    
-  <div id="cartItem"></div>    
-  <div class="button-container">
-    <button id="proceedBtn" style="display:none;background-color: green;">Proceed to Order</button>    
-  </div>
 
-  <script>    
-    const cartDiv = document.getElementById("cartItem");    
-    const proceedBtn = document.getElementById("proceedBtn");    
-    const product = JSON.parse(localStorage.getItem("cartItem"));    
+    h1 {
+      text-align: center;
+      color: orangered;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #1c1c1c;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 10px;
+    }
+
+    .cart-item img {
+      width: 100px;
+      height: auto;
+      border-radius: 5px;
+      margin-right: 20px;
+    }
+
+    .details {
+      flex: 1;
+    }
+
+    .details h2 {
+      margin: 0;
+      font-size: 20px;
+      color: aquamarine;
+    }
+
+    .details p {
+      color: crimson;
+      font-size: 18px;
+    }
+
+    .remove-btn {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .remove-btn:hover {
+      background-color: darkred;
+    }
+
+    .proceed-btn {
+      display: block;
+      width: 200px;
+      margin: 30px auto;
+      padding: 12px;
+      font-size: 18px;
+      background-color: green;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .proceed-btn:hover {
+      background-color: yellowgreen;
+    }
+  </style>
+</head>
+<body style="max-width:1000px; margin: 20px auto;">
+  <h1>Your Cart</h1>
+  <div id="cartContainer"></div>
+
+  <button class="proceed-btn" onclick="proceedToOrder()">Proceed</button>
+
+  <script>
+    const cartContainer = document.getElementById("cartContainer");
+    let cart = JSON.parse(localStorage.getItem("cartItems")) || [];
+
+    function displayCart() {
+      cartContainer.innerHTML = "";
+
+      if (cart.length === 0) {
+        cartContainer.innerHTML = "<p style='text-align:center;'>Your cart is empty.</p>";
+        document.querySelector(".proceed-btn").style.display = "none";
+        return;
+      }
+
+      cart.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `
+          <img src="${item.image}" alt="${item.name}" style="cursor:pointer;" onclick="window.location.href='${item.page}'">
+          <div class="details">
+            <h2>${item.name}</h2>
+            <p>${item.price}</p>
+          </div>
+          <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
+        `;
+        cartContainer.appendChild(div);
+      });
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      localStorage.setItem("cartItems", JSON.stringify(cart));
+      displayCart();
+    }
+
     
-    if (product) {    
-      cartDiv.innerHTML = `    
-        <img src="${product.image}" width="200" id="cartImage" style="cursor:pointer;" /><br>    
-        <h2>${product.name}</h2>    
-        <p>${product.price}</p>    
-        <div class="button-container">
-          <button id="removeBtn">Remove from Cart</button>    
-        </div>
-      `;    
+    
+    function proceedToOrder() {
+  if (cart.length === 0) {
+    alert("Cart is empty!");
+    return;
+  }
 
-      proceedBtn.style.display = "inline-block";
+  const productNames = cart.map(item => item.name).join(", ");
+  const productPrices = cart.map(item => item.price).join(", ");
 
-      // Image click → go back    
-      document.getElementById("cartImage").addEventListener("click", () => {    
-        window.location.href = "web21.html";    
-      });    
+  const combinedProduct = {
+    names: productNames,
+    prices: productPrices
+  };
 
-      // Proceed → order page    
-      proceedBtn.addEventListener("click", () => {    
-        const url = `order.html?name=${encodeURIComponent(product.name)}&price=${encodeURIComponent(product.price)}`;    
-        window.location.href = url;    
-      });    
+  localStorage.setItem("selectedProduct", JSON.stringify(combinedProduct));
+  window.location.href = "order.html";
+}
+    
 
-      // Remove from cart    
-      document.getElementById("removeBtn").addEventListener("click", () => {    
-        localStorage.removeItem("cartItem");    
-        cartDiv.innerHTML = "<p>No items in cart.</p>";    
-        proceedBtn.style.display = "none";    
-      });    
-    } else {    
-      cartDiv.innerHTML = "<p>No items in cart.</p>";    
-    }    
-  </script>    
-</body>    
+    displayCart();
+  </script>
+</body>
 </html>

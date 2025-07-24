@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Place Order</title>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <style>
     body {
       background-color: black;
@@ -12,7 +13,7 @@
       padding: 20px;
       text-align: center;
     }
-    input {
+    input, select {
       width: 340px;
       padding: 10px;
       margin: 5px 0;
@@ -31,16 +32,17 @@
     button:hover {
       background: darkgreen;
     }
-    strong{
-      color:red;
+    strong {
+      color: red;
     }
+    
   </style>
 </head>
 <body style="max-width: 1000px; margin: 20px auto;">
-  <h2 style="color: rgb(0, 0, 148); font-size: xx-large;">Order Form</h2>
+  <h2 style="color: rgb(0, 0, 150); font-size: xx-large;">Order Form</h2>
 
   <p><strong>Product Name:</strong> <span id="productName"></span></p>
-  <p><strong>Product Price:</strong> ₹<span id="productPrice"></span></p>
+  <p><strong>Product Price:</strong> <span id="productPrice"></span></p>
 
   <form id="orderForm">
     <input type="text" name="firstName" placeholder="First Name" required><br>
@@ -53,63 +55,101 @@
     <input type="tel" name="phone" placeholder="Phone Number" required><br>
     <input type="tel" name="whatsapp" placeholder="WhatsApp Number" required><br>
 
+    <select id="paymentMethod" required>
+      <option value="">-- Select Payment Method --</option>
+      <option value="upi">Google Pay / UPI</option>
+      <option value="cod">Cash on Delivery</option>
+    </select><br>
+
     <button type="submit">Place Order</button>
   </form>
 
   <p id="response"></p>
 
   <script>
-     const params = new URLSearchParams(window.location.search);
-  const name = params.get("name");
-  const price = params.get("price");
+    // Load product details
+    const product = JSON.parse(localStorage.getItem("selectedProduct")) || {};
+    document.getElementById("productName").textContent = product.names || "N/A";
+    document.getElementById("productPrice").textContent = product.prices || "N/A";
 
-  if (name && price) {
-    document.getElementById("productName").textContent = name;
-    document.getElementById("productPrice").textContent = price;
-  } else {
-    document.getElementById("productName").textContent = "No product selected";
-    document.getElementById("productPrice").textContent = "";
-  }
-    // Step 1: Load product from previous page
-    const productData = JSON.parse(localStorage.getItem("selectedProduct")) || {};
-    document.getElementById("productName").textContent = productData.name || "N/A";
-    document.getElementById("productPrice").textContent = productData.price || "N/A";
-
-    // Step 2: Submit full order
+    // Handle order submission
     document.getElementById("orderForm").addEventListener("submit", function(e) {
       e.preventDefault();
+
+      const paymentMethod = document.getElementById("paymentMethod").value;
+      if (!paymentMethod) {
+        alert("Please select a payment method.");
+        return;
+      }
 
       const formData = new FormData(this);
       const userData = {};
       formData.forEach((value, key) => userData[key] = value);
 
-      // Combine with product info
       const orderData = {
         ...userData,
-        productName: productData.name,
-        productPrice: productData.price
+        productName: product.names,
+        productPrice: product.prices,
+        paymentMethod: paymentMethod
       };
 
-      fetch('https://script.google.com/macros/s/AKfycbyR7Cdjty-Q9yFaVL9GdDt8f9VkqGKCEImELdQnbzfXB7xkhmt90skvBq8Dgdpqd8Kf7A/exec', {
+      if (paymentMethod === "cod") {
+        submitOrder(orderData);
+      } else if (paymentMethod === "upi") {
+        payWithRazorpay(orderData);
+      }
+      
+    });
+
+    function submitOrder(orderData) {
+      fetch('https://script.google.com/macros/s/AKfycbw3es5NjAk-531UbP5YRECQAJ8aRUr9CSc0Ad7eB8V-T-vTF5CDJ0zGqdLGkr2IWGbU/exec', {
         method: 'POST',
-        mode:'no-cors',
+        mode: 'no-cors',
         body: JSON.stringify(orderData),
         headers: {
           'Content-Type': 'application/json'
         }
       })
-      .then(res => res.text())
-      .then(msg => {
-        document.getElementById("response").textContent = "Order placed successfully,Track your order status via sms & bluedart";
-        alert("Order placed successfully")
-        this.reset();
+      .then(() => {
+        alert("Order placed successfully");
+        document.getElementById("orderForm").reset();
         localStorage.removeItem("selectedProduct");
+        window.location.href="placed.html";
       })
-      .catch(err => {
-        document.getElementById("response").textContent = "Failed to place order,Please check your internet connection";
-        alert("Failed to place order")
+      .catch(() => {
+       
+        alert("Failed to place order,check your internet connection.");
       });
-    });
+    }
+
+    function payWithRazorpay(orderData) {
+      const options = {
+        "key": "rzp_test_YourKeyHere", // Replace with your Razorpay test/live key
+        "amount": parseInt(orderData.productPrice) * 100, 
+        "currency": "INR",
+        "name": "Your Store",
+        "description": "Order Payment",
+        "handler": function (response) {
+          orderData.razorpay_payment_id = response.razorpay_payment_id;
+          submitOrder(orderData);
+        },
+        "prefill": {
+          "name": orderData.firstName + " " + orderData.lastName,
+          "email": orderData.email,
+          "contact": orderData.phone
+        },
+        "theme": {
+          "color": "#0f9d58"
+        },
+        "method": {
+          "upi": true,
+          "card": false,
+          "netbanking": false
+        }
+      };
+      const rzp = new Razorpay(options);
+      rzp.open();
+    }
   </script>
 </body>
 </html>
