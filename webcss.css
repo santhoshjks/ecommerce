@@ -186,6 +186,14 @@ figcaption{
     
 }
 
+video{
+  width: 80%;
+  max-width: 800px;
+  border-radius: 16px;
+  margin: 5%;
+  margin-left: 10%;
+}
+
 .about{
     color: red;
     font-size: xx-large;
