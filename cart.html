@@ -96,6 +96,7 @@ img {
   <button class="proceed-btn" onclick="proceedToOrder()">Proceed</button>
 
   <script>
+    localStorage.removeItem("cartItems");
     const cartContainer = document.getElementById("cartContainer");
     let cart = JSON.parse(localStorage.getItem("cartItems")) || [];
 
@@ -154,3 +155,4 @@ img {
   </script>
 </body>
 </html>
+
