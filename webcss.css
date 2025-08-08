@@ -1,5 +1,5 @@
 body{
-    background-color: black;
+    background-color:#1a1a1a ;
 }
 .cart-container {
     position: relative;
@@ -206,4 +206,5 @@ video{
     text-align: center;
     padding: 5px;
 }
+
 
